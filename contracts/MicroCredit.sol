@@ -23,7 +23,7 @@ contract MicroCredit is Ownable {
         emit Request(from, amount);
     }
 
-    function rejectRequest(address borrower, uint amount) public onlyOwner {
+    function rejectRequest(address borrower) public onlyOwner {
         requests[borrower] = 0;
     }
 
