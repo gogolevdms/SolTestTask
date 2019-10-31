@@ -1,0 +1,26 @@
+{
+  "name": "soltesttask",
+  "version": "1.0.0",
+  "description": "Test task",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gogolevdms/SolTestTask.git"
+  },
+  "keywords": [
+    "solidity",
+    "smart",
+    "contract"
+  ],
+  "author": "Dmitriy Gogolev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gogolevdms/SolTestTask/issues"
+  },
+  "homepage": "https://github.com/gogolevdms/SolTestTask#readme"
+}
