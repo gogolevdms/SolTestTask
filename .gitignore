@@ -64,3 +64,4 @@ typings/
 /build
 /coverage
 package-lock.json
+coverage.json

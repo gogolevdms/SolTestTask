@@ -1,27 +1,50 @@
 pragma solidity 0.5.8;
 
-contract MicroCredit {
-	mapping (address => uint) balances;
+import "./Ownable.sol";
 
-	event Transfer(address indexed _from, address indexed _to, uint256 _value);
 
-	constructor() public {
-		balances[tx.origin] = 10000;
+contract MicroCredit is Ownable {
+	mapping (address => uint) requests;
+	mapping (address => uint) approves;
+
+    event Request(address indexed _from, uint256 _value);
+
+	function requestCredit(uint amount) public {
+        requestCreditWithFacilitator(msg.sender, amount);
 	}
 
-	function sendCoin(address receiver, uint amount) public returns(bool sufficient) {
-		if (balances[msg.sender] < amount) return false;
-		balances[msg.sender] -= amount;
-		balances[receiver] += amount;
-		emit Transfer(msg.sender, receiver, amount);
-		return true;
-	}
+    function approveRequest(address borrower, uint amount) public payable onlyOwner {
+        require(msg.value == amount);
+        approves[borrower] = amount;
+    }
 
-//	function getBalanceInEth(address addr) public view returns(uint){
-//		return ConvertLib.convert(getBalance(addr),2);
-//	}
+    function requestCreditWithFacilitator(address from, uint amount) public {
+        requests[from] = amount;
+        emit Request(from, amount);
+    }
 
-	function getBalance(address addr) public view returns(uint) {
-		return balances[addr];
-	}
+    function rejectRequest(address borrower, uint amount) public onlyOwner {
+        requests[borrower] = 0;
+    }
+
+    function getCredit() public {
+        getCreditWithFacilitator(msg.sender);
+    }
+
+    function getCreditWithFacilitator(address payable from) public {
+        address payable _to = from;
+        uint _value = approves[_to];
+
+        approves[_to] = 0;
+        _to.transfer(_value);
+    }
+
+    function cancelCredit() public {
+        address _from = msg.sender;
+        uint _value = approves[_from];
+
+        approves[_from] = 0;
+        owner.transfer(_value);
+    }
+
 }
